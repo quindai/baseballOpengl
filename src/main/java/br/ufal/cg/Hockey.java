@@ -24,6 +24,7 @@ import com.jogamp.opengl.awt.GLCanvas;
 
 //https://github.com/sgothel/jogl-demos
 //https://download.java.net/media/jogl/demos/www/
+//http://forum.jogamp.org/question-about-the-GLCanvas-and-GLJPanel-td3844025.html
 
 public class Hockey extends JFrame implements GLEventListener, ActionListener {
 
@@ -64,7 +65,7 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 		btnCor.addActionListener(new colorAction());
 		latpanel.add(btnCor);
 		latpanel.add(lblColor);
-		//tamanho da area de desenho
+		// tamanho da area de desenho
 		glcanvas.setSize(600, 600);
 		glcanvas.addGLEventListener(this);
 		getContentPane().add(glcanvas, BorderLayout.CENTER);
@@ -79,6 +80,7 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 	public void init(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 
+		//gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f); 
 		System.err.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
 		System.err.println("INIT GL IS: " + gl.getClass().getName());
 		System.err.println("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR));
@@ -92,70 +94,241 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
-		//ponto origem é o centro da viewport
-		//positivo:: y=move para cima, x=move para direita
-		//negativo:: y=para baixo, x=move para esquerda
+		// ponto origem é o centro da viewport
+		// positivo:: y=move para cima, x=move para direita
+		// negativo:: y=para baixo, x=move para esquerda
 		final GL2 gl = drawable.getGL().getGL2();
 
+		//gl.glColor3f(0.0f, 0.0f, 0.0f);
 		gl.glBegin(GL2.GL_LINES);
-		//glVertex3f(x, y, z)
+		// glVertex3f(x, y, z)
+
+		// linhas laterais
+		gl.glVertex3f(-0.50f, 0.70f, 0); // esquerda
+		gl.glVertex3f(-0.50f, -0.70f, 0);
+
+		gl.glVertex3f(0.50f, 0.70f, 0); // direita
+		gl.glVertex3f(0.50f, -0.70f, 0);
+
+		gl.glVertex3f(-0.50f, 0.0f, 0); // linha central
+		gl.glVertex3f(0.50f, 0.0f, 0);
+
+		gl.glVertex3f(-0.40f, -0.80f, 0); // linha topo
+		gl.glVertex3f(0.41f, -0.80f, 0);
 		
-			//linhas laterais
-			gl.glVertex3f(-0.50f, 0.70f, 0); //esquerda
-			gl.glVertex3f(-0.50f, -0.70f, 0);
-			
-			gl.glVertex3f(0.50f, 0.70f, 0); //direita
-			gl.glVertex3f(0.50f, -0.70f, 0);
-			
-			gl.glVertex3f(-0.50f, 0.0f, 0); //linha central
-			gl.glVertex3f(0.50f, 0.0f, 0);
-			
-			gl.glVertex3f(-0.40f, -0.80f, 0); //linha topo
-			gl.glVertex3f(0.41f, -0.80f, 0);
-			
-			gl.glVertex3f(-0.40f, 0.80f, 0); //linha baixo
-			gl.glVertex3f(0.41f, 0.80f, 0);
-			
-			gl.glVertex3f(-0.50f, 0.72f, 0); //linha baixo segunda
-			gl.glVertex3f(0.50f, 0.72f, 0);
-			
-			gl.glVertex3f(-0.50f, -0.72f, 0); //linha topo segunda
-			gl.glVertex3f(0.50f, -0.72f, 0);
+		gl.glVertex3f(-0.50f, -0.72f, 0); // linha topo segunda
+		gl.glVertex3f(0.50f, -0.72f, 0);
+		
+		gl.glVertex3f(-0.50f, 0.2f, 0); // linha topo terceira
+		gl.glVertex3f(0.50f, 0.2f, 0);
+
+		gl.glVertex3f(-0.40f, 0.80f, 0); // linha baixo
+		gl.glVertex3f(0.41f, 0.80f, 0);
+
+		gl.glVertex3f(-0.50f, 0.72f, 0); // linha baixo segunda
+		gl.glVertex3f(0.50f, 0.72f, 0);
+
+		gl.glVertex3f(-0.50f, -0.2f, 0); // linha baixo terceira
+		gl.glVertex3f(0.50f, -0.2f, 0);
+		
+		//linhas coladas aos circulos
+		gl.glVertex3f(0.17f, 0.48f, 0); // superior direito
+		gl.glVertex3f(0.43f, 0.48f, 0);
+		
+		gl.glVertex3f(0.17f, 0.52f, 0); // superior direito
+		gl.glVertex3f(0.43f, 0.52f, 0);
+		
+		gl.glVertex3f(0.17f, -0.48f, 0); // inferior direito
+		gl.glVertex3f(0.43f, -0.48f, 0);
+		
+		gl.glVertex3f(0.17f, -0.52f, 0); // inferior direito
+		gl.glVertex3f(0.43f, -0.52f, 0);
+		
+		gl.glVertex3f(-0.17f, -0.48f, 0); // inferior esquerdo
+		gl.glVertex3f(-0.43f, -0.48f, 0);
+		
+		gl.glVertex3f(-0.17f, -0.52f, 0); // inferior esquerdo
+		gl.glVertex3f(-0.43f, -0.52f, 0);
+		
+		gl.glVertex3f(-0.17f, 0.48f, 0); // superior esquerdo
+		gl.glVertex3f(-0.43f, 0.48f, 0);
+		
+		gl.glVertex3f(-0.17f, 0.52f, 0); // superior esquerdo
+		gl.glVertex3f(-0.43f, 0.52f, 0);
+		
 		gl.glEnd();
-		
+
 		double theta;
 		gl.glBegin(GL2.GL_LINE_STRIP);
-			for(int i=0; i<360; ++i) {  //circulo
-				theta = i*Math.PI/180;
-				gl.glVertex2f(0.1f*(float)Math.cos(theta), 0.1f*(float)Math.sin(theta));
+			for (int i = 0; i < 360; ++i) { // circulo central
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.1f * (float) Math.cos(theta), 0.1f * (float) Math.sin(theta));
 			}
 		gl.glEnd();
 		
 		gl.glBegin(GL2.GL_LINE_STRIP);
-			for(int i=0; i<90; ++i) {  //arco
-				theta = i*Math.PI/180;
-				gl.glVertex2f(0.40f+0.1f*(float)Math.cos(theta), 0.70f+0.1f*(float)Math.sin(theta));
+			for (int i = 0; i < 360; ++i) { // circulo superior direito
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.30f+0.1f * (float) Math.cos(theta), 0.50f+0.1f * (float) Math.sin(theta));
 			}
 		gl.glEnd();
 		
 		gl.glBegin(GL2.GL_LINE_STRIP);
-			for(int i=0; i<90; ++i) {
-				theta = i*Math.PI/180;
-				gl.glVertex2f(0.40f+0.1f*(float)Math.cos(theta), -0.70f-0.1f*(float)Math.sin(theta));
+			for (int i = 0; i < 360; ++i) { // circulo superior esquerdo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(-0.30f+0.1f * (float) Math.cos(theta), 0.50f+0.1f * (float) Math.sin(theta));
 			}
 		gl.glEnd();
 		
 		gl.glBegin(GL2.GL_LINE_STRIP);
-			for(int i=90; i<180; ++i) {
-				theta = i*Math.PI/180;
-				gl.glVertex2f(-0.40f+0.1f*(float)Math.cos(theta), 0.70f+0.1f*(float)Math.sin(theta));
+			for (int i = 0; i < 360; ++i) { // circulo inferior esquerdo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(-0.30f+0.1f * (float) Math.cos(theta), -0.50f+0.1f * (float) Math.sin(theta));
 			}
 		gl.glEnd();
 		
 		gl.glBegin(GL2.GL_LINE_STRIP);
-		for(int i=180; i<270; ++i) {
-			theta = i*Math.PI/180;
-			gl.glVertex2f(-0.40f+0.1f*(float)Math.cos(theta), -0.70f+0.1f*(float)Math.sin(theta));
+			for (int i = 0; i < 360; ++i) { // circulo inferior direito
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.30f+0.1f * (float) Math.cos(theta), -0.50f+0.1f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for (int i = 0; i < 90; ++i) { // arco superior direito
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.40f + 0.1f * (float) Math.cos(theta), 0.70f + 0.1f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for (int i = 0; i < 90; ++i) {  // arco inferior direito
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.40f + 0.1f * (float) Math.cos(theta), -0.70f - 0.1f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for (int i = 90; i < 180; ++i) {  //arco superior esquerdo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(-0.40f + 0.1f * (float) Math.cos(theta), 0.70f + 0.1f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for (int i = 180; i < 270; ++i) {  //arco inferior esquerdo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(-0.40f + 0.1f * (float) Math.cos(theta), -0.70f + 0.1f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_LINE_STRIP); 
+			for (int i = 0; i < 180; ++i) {  //arco central inferior
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.05f * (float) Math.cos(theta), -0.72f + 0.05f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_LINE_STRIP); 
+			for (int i = 180; i < 360; ++i) {  //arco central inferior
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.05f * (float) Math.cos(theta), 0.72f + 0.05f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		//arcos auxiliares
+		gl.glColor3f(0.0f, 0.0f, 0.0f);
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo superior direito auxiliar
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.30f+0.095f * (float) Math.cos(theta), 0.50f+0.095f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo superior esquerdo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(-0.30f+0.095f * (float) Math.cos(theta), 0.50f+0.095f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+	
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo inferior esquerdo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(-0.30f+0.095f * (float) Math.cos(theta), -0.50f+0.095f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo inferior direito
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.30f+0.095f * (float) Math.cos(theta), -0.50f+0.095f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		//todos os pontinhos do campo
+		//tentar criar array de pontos e desenha-lo depois
+		gl.glColor3f(1.0f, 1.0f, 1.0f); 
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo central
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.02f * (float) Math.cos(theta), 0.02f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo superior direito
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.30f+0.01f * (float) Math.cos(theta), 0.50f+0.01f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+		for (int i = 0; i < 360; ++i) { // circulo superior esquerdo
+			theta = i * Math.PI / 180;
+			gl.glVertex2f(-0.30f+0.01f * (float) Math.cos(theta), 0.50f+0.01f * (float) Math.sin(theta));
+		}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo inferior esquerdo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(-0.30f+0.01f * (float) Math.cos(theta), -0.50f+0.01f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // circulo inferior direito
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.30f+0.01f * (float) Math.cos(theta), -0.50f+0.01f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+			for (int i = 0; i < 360; ++i) { // mini circulo central direito baixo
+				theta = i * Math.PI / 180;
+				gl.glVertex2f(0.30f+0.01f * (float) Math.cos(theta), -0.17f+0.01f * (float) Math.sin(theta));
+			}
+		gl.glEnd();
+			
+		gl.glBegin(GL2.GL_POLYGON);
+		for (int i = 0; i < 360; ++i) { // mini circulo central direito topo
+			theta = i * Math.PI / 180;
+			gl.glVertex2f(0.30f+0.01f * (float) Math.cos(theta), 0.17f+0.01f * (float) Math.sin(theta));
+		}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+		for (int i = 0; i < 360; ++i) { // mini circulo central esquerdo topo
+			theta = i * Math.PI / 180;
+			gl.glVertex2f(-0.30f+0.01f * (float) Math.cos(theta), 0.17f+0.01f * (float) Math.sin(theta));
+		}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_POLYGON);
+		for (int i = 0; i < 360; ++i) { // mini circulo central esquerdo baixo
+			theta = i * Math.PI / 180;
+			gl.glVertex2f(-0.30f+0.01f * (float) Math.cos(theta), -0.17f+0.01f * (float) Math.sin(theta));
 		}
 		gl.glEnd();
 	}
@@ -164,7 +337,7 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 	}
 
-	private void eq_da_reta(GL2 gl,int x1, int y1, int x2, int y2, int color) {
+	private void eq_da_reta(GL2 gl, int x1, int y1, int x2, int y2, int color) {
 		int x, y;
 		float a;
 		int valor;
