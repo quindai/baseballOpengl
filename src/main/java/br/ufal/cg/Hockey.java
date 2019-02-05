@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -12,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -21,12 +24,14 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.util.FPSAnimator;
 
 //https://github.com/sgothel/jogl-demos
 //https://download.java.net/media/jogl/demos/www/
 //http://forum.jogamp.org/question-about-the-GLCanvas-and-GLJPanel-td3844025.html
+//http://www.cs.umd.edu/~meesh/kmconroy/JOGLTutorial/
 
-public class Hockey extends JFrame implements GLEventListener, ActionListener {
+public class Hockey extends JFrame implements GLEventListener, ActionListener, MouseListener {
 
 	final GLProfile profile = GLProfile.get(GLProfile.GL2);
 	GLCapabilities capabilities = new GLCapabilities(profile);
@@ -36,6 +41,8 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 	JRadioButton[] opts = new JRadioButton[2];
 	JButton btnCor = new JButton("Escolha a cor");
 	private JLabel lblColor;
+	public Color color;
+	public float myX = -1000, myY = -1000, fY = 0, fX = 0;
 
 	public Hockey() {
 		super("Campo de Hockey");
@@ -68,12 +75,19 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 		// tamanho da area de desenho
 		glcanvas.setSize(600, 600);
 		glcanvas.addGLEventListener(this);
+		glcanvas.addMouseListener(this);
 		getContentPane().add(glcanvas, BorderLayout.CENTER);
 		getContentPane().add(latpanel, BorderLayout.EAST);
+		
+		//dispensavel
+		FPSAnimator animator = new FPSAnimator(60);
+        animator.add(glcanvas);
+        animator.start();
 	}
 
 	public static void main(String[] args) {
 		new Hockey().setVisible(true);
+		
 	}
 
 	@Override
@@ -156,6 +170,8 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 		gl.glVertex3f(-0.17f, 0.52f, 0); // superior esquerdo
 		gl.glVertex3f(-0.43f, 0.52f, 0);
 		
+		gl.glVertex3f(myX, myY, 0);
+		gl.glVertex3f(fX, fY, 0);
 		gl.glEnd();
 
 		double theta;
@@ -335,6 +351,8 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+		final GL2 gl = drawable.getGL().getGL2();
+		gl.glViewport(0, 0, width, height);
 	}
 
 	private void eq_da_reta(GL2 gl, int x1, int y1, int x2, int y2, int color) {
@@ -358,9 +376,48 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Color c = JColorChooser.showDialog(null, "Escolha uma cor", lblColor.getForeground());
-			if (c != null)
+			if (c != null) {
+				color = c;
 				lblColor.setForeground(c);
+			}
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		System.out.println(arg0.getX());
+		
+		glcanvas.repaint();
+		JOptionPane.showMessageDialog(null, arg0, "Evento Mouse clicado", 1);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		myY = arg0.getY()/1000;
+		myX = arg0.getX()/1000;
+		glcanvas.repaint();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		fY = arg0.getY()/1000;
+		fX = arg0.getX()/1000;
+		glcanvas.repaint();
 	}
 
 }
