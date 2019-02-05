@@ -22,7 +22,10 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 
-public class Baseball extends JFrame implements GLEventListener, ActionListener {
+//https://github.com/sgothel/jogl-demos
+//https://download.java.net/media/jogl/demos/www/
+
+public class Hockey extends JFrame implements GLEventListener, ActionListener {
 
 	final GLProfile profile = GLProfile.get(GLProfile.GL2);
 	GLCapabilities capabilities = new GLCapabilities(profile);
@@ -33,7 +36,7 @@ public class Baseball extends JFrame implements GLEventListener, ActionListener 
 	JButton btnCor = new JButton("Escolha a cor");
 	private JLabel lblColor;
 
-	public Baseball() {
+	public Hockey() {
 		super("Campo de Baseball");
 		// setSize(400, 400);
 		init();
@@ -61,6 +64,7 @@ public class Baseball extends JFrame implements GLEventListener, ActionListener 
 		btnCor.addActionListener(new colorAction());
 		latpanel.add(btnCor);
 		latpanel.add(lblColor);
+		//tamanho da area de desenho
 		glcanvas.setSize(400, 400);
 		glcanvas.addGLEventListener(this);
 		getContentPane().add(glcanvas, BorderLayout.CENTER);
@@ -68,11 +72,18 @@ public class Baseball extends JFrame implements GLEventListener, ActionListener 
 	}
 
 	public static void main(String[] args) {
-		new Baseball().setVisible(true);
+		new Hockey().setVisible(true);
 	}
 
 	@Override
 	public void init(GLAutoDrawable drawable) {
+		GL2 gl = drawable.getGL().getGL2();
+
+		System.err.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
+		System.err.println("INIT GL IS: " + gl.getClass().getName());
+		System.err.println("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR));
+		System.err.println("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER));
+		System.err.println("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION));
 	}
 
 	@Override
@@ -81,15 +92,20 @@ public class Baseball extends JFrame implements GLEventListener, ActionListener 
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
+		//ponto origem é o centro da viewport
 		final GL2 gl = drawable.getGL().getGL2();
 
+		gl.glBegin(GL2.GL_LINES);
+		gl.glVertex3f(0.20f, -0.50f, 0);
+		gl.glVertex3f(0.0f, 0.0f, 0);
+		gl.glEnd();
 	}
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 	}
 
-	private void eq_da_reta(int x1, int y1, int x2, int y2, int color) {
+	private void eq_da_reta(GL2 gl,int x1, int y1, int x2, int y2, int color) {
 		int x, y;
 		float a;
 		int valor;
