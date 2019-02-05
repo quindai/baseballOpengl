@@ -37,7 +37,7 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 	private JLabel lblColor;
 
 	public Hockey() {
-		super("Campo de Baseball");
+		super("Campo de Hockey");
 		// setSize(400, 400);
 		init();
 		pack();
@@ -65,7 +65,7 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 		latpanel.add(btnCor);
 		latpanel.add(lblColor);
 		//tamanho da area de desenho
-		glcanvas.setSize(400, 400);
+		glcanvas.setSize(600, 600);
 		glcanvas.addGLEventListener(this);
 		getContentPane().add(glcanvas, BorderLayout.CENTER);
 		getContentPane().add(latpanel, BorderLayout.EAST);
@@ -93,11 +93,70 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener {
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		//ponto origem é o centro da viewport
+		//positivo:: y=move para cima, x=move para direita
+		//negativo:: y=para baixo, x=move para esquerda
 		final GL2 gl = drawable.getGL().getGL2();
 
 		gl.glBegin(GL2.GL_LINES);
-		gl.glVertex3f(0.20f, -0.50f, 0);
-		gl.glVertex3f(0.0f, 0.0f, 0);
+		//glVertex3f(x, y, z)
+		
+			//linhas laterais
+			gl.glVertex3f(-0.50f, 0.70f, 0); //esquerda
+			gl.glVertex3f(-0.50f, -0.70f, 0);
+			
+			gl.glVertex3f(0.50f, 0.70f, 0); //direita
+			gl.glVertex3f(0.50f, -0.70f, 0);
+			
+			gl.glVertex3f(-0.50f, 0.0f, 0); //linha central
+			gl.glVertex3f(0.50f, 0.0f, 0);
+			
+			gl.glVertex3f(-0.40f, -0.80f, 0); //linha topo
+			gl.glVertex3f(0.41f, -0.80f, 0);
+			
+			gl.glVertex3f(-0.40f, 0.80f, 0); //linha baixo
+			gl.glVertex3f(0.41f, 0.80f, 0);
+			
+			gl.glVertex3f(-0.50f, 0.72f, 0); //linha baixo segunda
+			gl.glVertex3f(0.50f, 0.72f, 0);
+			
+			gl.glVertex3f(-0.50f, -0.72f, 0); //linha topo segunda
+			gl.glVertex3f(0.50f, -0.72f, 0);
+		gl.glEnd();
+		
+		double theta;
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for(int i=0; i<360; ++i) {  //circulo
+				theta = i*Math.PI/180;
+				gl.glVertex2f(0.1f*(float)Math.cos(theta), 0.1f*(float)Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for(int i=0; i<90; ++i) {  //arco
+				theta = i*Math.PI/180;
+				gl.glVertex2f(0.40f+0.1f*(float)Math.cos(theta), 0.70f+0.1f*(float)Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for(int i=0; i<90; ++i) {
+				theta = i*Math.PI/180;
+				gl.glVertex2f(0.40f+0.1f*(float)Math.cos(theta), -0.70f-0.1f*(float)Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_LINE_STRIP);
+			for(int i=90; i<180; ++i) {
+				theta = i*Math.PI/180;
+				gl.glVertex2f(-0.40f+0.1f*(float)Math.cos(theta), 0.70f+0.1f*(float)Math.sin(theta));
+			}
+		gl.glEnd();
+		
+		gl.glBegin(GL2.GL_LINE_STRIP);
+		for(int i=180; i<270; ++i) {
+			theta = i*Math.PI/180;
+			gl.glVertex2f(-0.40f+0.1f*(float)Math.cos(theta), -0.70f+0.1f*(float)Math.sin(theta));
+		}
 		gl.glEnd();
 	}
 
