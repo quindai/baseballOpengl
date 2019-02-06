@@ -51,13 +51,14 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 	GLCapabilities capabilities = new GLCapabilities(profile);
 	final GLCanvas glcanvas = new GLCanvas(capabilities);
 
-	private String[] optString = { "Algoritmo de Bresenham", "Eq. da Reta" };
+	private String[] optString = { "Eq. da Reta", "Algoritmo de Bresenham" };
 	JRadioButton[] opts = new JRadioButton[2];
 	JButton btnCor = new JButton("Escolha a cor");
 	private JLabel lblColor;
 	public Color coloR = null ;
 	public float myX, myY , fY, fX;
 	FPSAnimator animator;
+	boolean choose = false;  //false=eq reta, true=bresenh
 
 	ArrayList<MyLines> linhas = new ArrayList<>();
 
@@ -416,13 +417,14 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 	private void eq_da_reta(GL2 gl, int x1, int y1, int x2, int y2, int color) {
 		int x, y;
 		float a;
-		int valor;
 
 		a = (y2 - y1) / (x2 - x1);
 		for (x = x1; x <= x2; x++) {
 			// arredonda y
 			y = (int) (y1 + a * (x - x1));
-			// TODO write_pixel(x, y, color)
+			gl.glBegin(GL2.GL_POINT);
+				gl.glVertex2f(x, y);
+			gl.glEnd();
 		}
 	}
 
