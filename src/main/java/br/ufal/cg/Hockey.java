@@ -196,12 +196,17 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 			gl.glVertex3f(-0.17f, 0.52f, 0); // superior esquerdo
 			gl.glVertex3f(-0.43f, 0.52f, 0);
 			
-			for(MyLines l: linhas) {
-				gl.glColor3f(l.color.getRed(), l.color.getGreen(), l.color.getBlue());
-				gl.glVertex3f(l.x, l.y, 0); 
-				gl.glVertex3f(l.fx, l.fy, 0);
-				//gl.glColor3f(1.0f, 1.0f, 1.0f);   //branco
-			}
+			
+			for(MyLines l: linhas) 
+				if (choose) {
+					gl.glColor3f(l.color.getRed(), l.color.getGreen(), l.color.getBlue());
+					gl.glVertex3f(l.x, l.y, 0); 
+					gl.glVertex3f(l.fx, l.fy, 0);
+					//gl.glColor3f(1.0f, 1.0f, 1.0f);   //branco
+				}
+				else {
+					eq_da_reta(gl, l.x, l.y, l.fx, l.fy, l.color);
+				}
 		gl.glEnd();
 		
 		gl.glFlush();
@@ -218,6 +223,20 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 	}
 
 
+	private void eq_da_reta(GL2 gl, float x1, float y1, float x2, float y2, Color color) {
+		int x, y;
+		float a;
+
+		gl.glPointSize(10.0f);
+		a = (y2 - y1) / (x2 - x1);
+		for (x = (int)x1; x <= x2; x+=0.01) {
+			// arredonda y
+			y = (int) (y1 + a * (x - x1));
+			gl.glBegin(GL2.GL_POINTS);
+				gl.glVertex2f(x, y);
+			gl.glEnd();
+		}
+	}
 	
 	@Override
 	public void display(GLAutoDrawable drawable) {
@@ -414,22 +433,13 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 		gl.glViewport(0, 0, width, height);
 	}
 
-	private void eq_da_reta(GL2 gl, int x1, int y1, int x2, int y2, int color) {
-		int x, y;
-		float a;
-
-		a = (y2 - y1) / (x2 - x1);
-		for (x = x1; x <= x2; x++) {
-			// arredonda y
-			y = (int) (y1 + a * (x - x1));
-			gl.glBegin(GL2.GL_POINT);
-				gl.glVertex2f(x, y);
-			gl.glEnd();
-		}
-	}
-
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == optString[0])
+			choose = false;
+		else
+			choose = true;
+		System.out.println(e.getActionCommand());
 	}
 
 	private class colorAction implements ActionListener {
