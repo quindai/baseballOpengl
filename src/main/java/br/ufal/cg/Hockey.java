@@ -224,12 +224,18 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 
 
 	private void eq_da_reta(GL2 gl, float x1, float y1, float x2, float y2, Color color) {
-		float x, y;
+		float x, y, myx1 = x1, myx2 = x2;
 		float a;
 
 		//gl.glPointSize(10.0f);
-		a = (y2 - y1) / (x2 - x1);
-		for (x = x1; x <= x2; x+=0.001) {
+		float aux;
+		if (x2< x1) {
+			myx1 = x2;
+			myx2 = x1;
+		}
+		a = (y2 - y1) / (x1 == x2 ? 1 : x2-x1);
+		gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+		for (x = myx1; x <= myx2; x+=0.001) {
 			// arredonda y
 			y = (y1 + a * (x - x1));
 			gl.glBegin(GL2.GL_POINTS);
