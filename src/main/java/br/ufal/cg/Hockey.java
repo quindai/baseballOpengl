@@ -224,16 +224,16 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 
 
 	private void eq_da_reta(GL2 gl, float x1, float y1, float x2, float y2, Color color) {
-		int x, y;
+		float x, y;
 		float a;
 
-		gl.glPointSize(10.0f);
+		//gl.glPointSize(10.0f);
 		a = (y2 - y1) / (x2 - x1);
-		for (x = (int)x1; x <= x2; x+=0.01) {
+		for (x = x1; x <= x2; x+=0.001) {
 			// arredonda y
-			y = (int) (y1 + a * (x - x1));
+			y = (y1 + a * (x - x1));
 			gl.glBegin(GL2.GL_POINTS);
-				gl.glVertex2f(x, y);
+				gl.glVertex3f(x, y,0);
 			gl.glEnd();
 		}
 	}
@@ -245,6 +245,8 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 		// negativo:: y=para baixo, x=move para esquerda
 		final GL2 gl = drawable.getGL().getGL2();
 
+		gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT);	// Clean the screen and the depth buffer
+		gl.glLoadIdentity();
 		//gl.glColor3f(0.0f, 0.0f, 0.0f);
 		
 		drawLines(gl);
