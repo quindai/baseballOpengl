@@ -202,7 +202,7 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 					gl.glColor3f(l.color.getRed(), l.color.getGreen(), l.color.getBlue());
 					gl.glVertex3f(l.x, l.y, 0); 
 					gl.glVertex3f(l.fx, l.fy, 0);
-					//gl.glColor3f(1.0f, 1.0f, 1.0f);   //branco
+					//bresenham(gl, l.x, l.y, l.fx, l.fy, l.color);
 				}
 				else {
 					eq_da_reta(gl, l.x, l.y, l.fx, l.fy, l.color);
@@ -238,6 +238,35 @@ public class Hockey extends JFrame implements GLEventListener, ActionListener, M
 		for (x = myx1; x <= myx2; x+=0.001) {
 			// arredonda y
 			y = (y1 + a * (x - x1));
+			gl.glBegin(GL2.GL_POINTS);
+				gl.glVertex3f(x, y,0);
+			gl.glEnd();
+		}
+	}
+	
+	private void bresenham(GL2 gl, float x1, float y1, float x2, float y2, Color color) {
+		float dx, dy, incE, incNE, d, x, y;
+		
+		dx = (x2 > x1 ?x2 - x1:x1-x2);
+		dy = y2 -y1;
+		d = 2 * dy - dx;
+		incE = 2 * dy;
+		incNE = 2 * (dy-dx);
+		x = x1;
+		y = y1;
+		gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+		gl.glBegin(GL2.GL_POINTS);
+			gl.glVertex3f(x, y,0);
+		gl.glEnd();
+		while ( x < x2) {
+			if ( d < 0) {
+				d = d + incE;
+				x = x + 1;
+			} else {
+				d = d + incNE;
+				x = x+1;
+				y = y+1;
+			}
 			gl.glBegin(GL2.GL_POINTS);
 				gl.glVertex3f(x, y,0);
 			gl.glEnd();
